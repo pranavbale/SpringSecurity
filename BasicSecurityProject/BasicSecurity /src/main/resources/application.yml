@@ -1,0 +1,14 @@
+# database connectivity
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/Security-BasicSecurity
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # application name
+  application:
+    name: BASIC-SECURITY
