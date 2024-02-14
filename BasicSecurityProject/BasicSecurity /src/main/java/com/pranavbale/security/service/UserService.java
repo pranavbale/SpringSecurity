@@ -16,7 +16,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public void createUser(UserInfo userInfo) {
-        // before storing user into database firstly encode it's password
+        // before storing user into database firstly encode its password
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         userRepository.save(userInfo);
     }

@@ -3,6 +3,9 @@ package com.pranavbale.security.config;
 import com.pranavbale.security.service.UserInfoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,7 +20,7 @@ public class SecurityConfig {
 
     // create a Role base Authentication
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+    public UserDetailsService userDetailsService() {
 
         // create a hard coded user
 
@@ -48,7 +51,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 // permit all the request without Authentication
-                                .requestMatchers("/person/welcome", "/user/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/person/createUser").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/person/welcome").permitAll()
                                 // if URL with this type then firstly authentication is required
                                 .requestMatchers("/person/**").authenticated()
                                 // only admin and user is allowed
@@ -59,6 +63,14 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
     }
 
     // use a passwordEncoder for encrypt and decrypt the password
