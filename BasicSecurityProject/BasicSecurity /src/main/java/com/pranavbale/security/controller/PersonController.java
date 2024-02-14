@@ -15,6 +15,11 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Hello World";
+    }
+
     @PostMapping("/create")
     public PersonData createPerson(@RequestBody PersonData personData) {
         return personService.createPerson(personData);
