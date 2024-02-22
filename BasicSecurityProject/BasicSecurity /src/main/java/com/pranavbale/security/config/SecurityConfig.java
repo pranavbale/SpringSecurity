@@ -59,16 +59,22 @@ public class SecurityConfig {
 //                              .requestMatchers("/person/**").hasAnyRole("ADMIN", "USER")
                                 // only admin is allowed for this url
 //                              .requestMatchers("/person/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
 
+
+    // for creating a user detail service need to create a bean of authentication provider
     @Bean
     public AuthenticationProvider authenticationProvider() {
+        // create a Dao Authentication Provider Object
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        // set a user detail service to authentication provider
         authenticationProvider.setUserDetailsService(userDetailsService());
+        // set a password encoder for the authentication provider
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
